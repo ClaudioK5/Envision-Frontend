@@ -23,11 +23,13 @@ export function EnvisionPage() {
   const resultBodyRef = useRef<HTMLDivElement>(null);
   const questionId = useId();
   const uploadId = useId();
+  const creatorModeId = useId();
   const abortRef = useRef<AbortController | null>(null);
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [question, setQuestion] = useState("");
+  const [creatorMode, setCreatorMode] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [phase, setPhase] = useState<FlowPhase>("form");
   const [loadingMessage, setLoadingMessage] = useState("Uploading your video…");
@@ -117,7 +119,11 @@ export function EnvisionPage() {
             const pct = Math.min(100, Math.round(ratio * 100));
             setUploadProgress(pct);
             if (pct >= 100) {
-              setLoadingMessage("Watching your video…");
+              setLoadingMessage(
+                creatorMode
+                  ? "Reviewing your video as a creator strategist…"
+                  : "Watching your video…",
+              );
             } else {
               setLoadingMessage(`Uploading your video… ${pct}%`);
             }
@@ -132,6 +138,7 @@ export function EnvisionPage() {
           },
         },
         controller.signal,
+        { creatorMode },
       );
 
       setResult(response.answer);
@@ -159,7 +166,7 @@ export function EnvisionPage() {
         abortRef.current = null;
       }
     }
-  }, [question, refreshUserProfile, videoFile]);
+  }, [creatorMode, question, refreshUserProfile, videoFile]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -229,10 +236,20 @@ export function EnvisionPage() {
       <section className="envision-page envision-page--result" aria-live="polite">
         <div className="content-card content-card--result">
           <p className="result-kicker">
-            {isStreaming ? "Analyzing your video" : "Analysis complete"}
+            {isStreaming
+              ? creatorMode
+                ? "Creator Mode"
+                : "Analyzing your video"
+              : creatorMode
+                ? "Creator Mode · complete"
+                : "Analysis complete"}
           </p>
           <h2 className="result-title">
-            {isStreaming ? "Envision is writing…" : "Here's what Envision found"}
+            {isStreaming
+              ? "Envision is writing…"
+              : creatorMode
+                ? "Here's how to improve this video"
+                : "Here's what Envision found"}
           </h2>
           {isStreaming ? (
             <p className="result-status">{loadingMessage}</p>
@@ -387,10 +404,33 @@ export function EnvisionPage() {
               className="envision-form__textarea"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
-              placeholder="What do you want to know about this video? (e.g. Summarize the main points, identify key moments, explain what happens at 2:30…)"
+              placeholder={
+                creatorMode
+                  ? "What should we improve? (e.g. How can I make the hook stronger? Review pacing and the CTA…)"
+                  : "What do you want to know about this video? (e.g. Summarize the main points, identify key moments, explain what happens at 2:30…)"
+              }
               rows={4}
               required
             />
+          </div>
+
+          <div className="envision-form__mode">
+            <label className="creator-mode-toggle" htmlFor={creatorModeId}>
+              <input
+                id={creatorModeId}
+                type="checkbox"
+                className="creator-mode-toggle__input"
+                checked={creatorMode}
+                onChange={(e) => setCreatorMode(e.target.checked)}
+              />
+              <span className="creator-mode-toggle__switch" aria-hidden />
+              <span className="creator-mode-toggle__copy">
+                <span className="creator-mode-toggle__title">Creator Mode</span>
+                <span className="creator-mode-toggle__hint">
+                  Get high-impact Instagram &amp; TikTok edit suggestions for this video
+                </span>
+              </span>
+            </label>
           </div>
 
           {phase === "error" && errorMessage ? (
@@ -406,7 +446,7 @@ export function EnvisionPage() {
           ) : null}
 
           <button type="submit" className="btn btn--primary" disabled={!canSubmit}>
-            Ask Envision
+            {creatorMode ? "Ask Envision · Creator Mode" : "Ask Envision"}
           </button>
 
           <p className="envision-form__footer-hint">
