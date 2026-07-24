@@ -419,6 +419,98 @@ body {
   color: var(--text-muted);
 }
 
+.envision-form__mode {
+  margin-top: -0.25rem;
+}
+
+.creator-mode-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: rgba(10, 22, 40, 0.45);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.creator-mode-toggle:hover {
+  border-color: rgba(74, 144, 217, 0.45);
+  background: rgba(30, 58, 95, 0.4);
+}
+
+.creator-mode-toggle:has(.creator-mode-toggle__input:checked) {
+  border-color: rgba(74, 144, 217, 0.55);
+  background: rgba(74, 144, 217, 0.12);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.creator-mode-toggle:has(.creator-mode-toggle__input:focus-visible) {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+.creator-mode-toggle__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.creator-mode-toggle__switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.5rem;
+  margin-top: 0.125rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.18s ease;
+}
+
+.creator-mode-toggle__switch::after {
+  content: "";
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: #f5f7fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s ease;
+}
+
+.creator-mode-toggle__input:checked + .creator-mode-toggle__switch {
+  background: var(--accent);
+}
+
+.creator-mode-toggle__input:checked + .creator-mode-toggle__switch::after {
+  transform: translateX(1.25rem);
+}
+
+.creator-mode-toggle__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.creator-mode-toggle__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.creator-mode-toggle__hint {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
 .envision-form__footer-hint {
   margin: 0;
   font-size: 0.8125rem;
