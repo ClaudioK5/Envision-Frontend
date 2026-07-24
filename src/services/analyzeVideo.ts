@@ -622,6 +622,12 @@ function streamAnalyzeRequest(
   });
 }
 
+function appendCreatorModeToFormData(formData: FormData, creatorMode: boolean): void {
+  if (creatorMode) {
+    formData.append("creator_mode", "1");
+  }
+}
+
 function streamAnalyzeWithObjectKey(
   objectKey: string,
   question: string,
@@ -629,6 +635,7 @@ function streamAnalyzeWithObjectKey(
   usage: VideoUsageMetadata,
   callbacks: AnalyzeStreamCallbacks,
   signal?: AbortSignal,
+  creatorMode = false,
 ): Promise<AnalyzeVideoResult> {
   const formData = new FormData();
   formData.append("object_key", objectKey);
@@ -637,7 +644,12 @@ function streamAnalyzeWithObjectKey(
     formData.append("expected_size", String(expectedSize));
   }
   appendUsageToFormData(formData, usage, "r2");
-  callbacks.onStatus?.("Analyzing your video…");
+  appendCreatorModeToFormData(formData, creatorMode);
+  callbacks.onStatus?.(
+    creatorMode
+      ? "Reviewing your video as a creator strategist…"
+      : "Analyzing your video…",
+  );
   return streamAnalyzeRequest(formData, callbacks, signal);
 }
 
@@ -647,13 +659,19 @@ function streamAnalyzeWithFile(
   usage: VideoUsageMetadata,
   callbacks: AnalyzeStreamCallbacks,
   signal?: AbortSignal,
+  creatorMode = false,
 ): Promise<AnalyzeVideoResult> {
   const formData = new FormData();
   formData.append("video", file, file.name);
   formData.append("question", question);
   appendUsageToFormData(formData, usage, "pa");
+  appendCreatorModeToFormData(formData, creatorMode);
   return streamAnalyzeRequest(formData, callbacks, signal, true);
 }
+
+export type AnalyzeVideoOptions = {
+  creatorMode?: boolean;
+};
 
 /** Stream analysis via SSE — upload progress + live answer text. */
 export async function analyzeVideoStream(
@@ -661,6 +679,7 @@ export async function analyzeVideoStream(
   question: string,
   callbacks: AnalyzeStreamCallbacks = {},
   signal?: AbortSignal,
+  options?: AnalyzeVideoOptions,
 ): Promise<AnalyzeVideoResult> {
   const validationError = validateVideoFile(file);
   if (validationError) {
@@ -672,6 +691,7 @@ export async function analyzeVideoStream(
     throw new AnalyzeVideoError("Please enter a question about your video.");
   }
 
+  const creatorMode = Boolean(options?.creatorMode);
   const usage = await probeVideoMetadata(file);
 
   if (file.size > PA_MAX_BYTES) {
@@ -683,16 +703,25 @@ export async function analyzeVideoStream(
       usage,
       callbacks,
       signal,
+      creatorMode,
     );
   }
 
-  return streamAnalyzeWithFile(file, trimmedQuestion, usage, callbacks, signal);
+  return streamAnalyzeWithFile(
+    file,
+    trimmedQuestion,
+    usage,
+    callbacks,
+    signal,
+    creatorMode,
+  );
 }
 
 /** Non-streaming fallback (curl / Postman / legacy). */
 export async function analyzeVideo(
   file: File,
   question: string,
+  options?: AnalyzeVideoOptions,
 ): Promise<AnalyzeVideoResult> {
   const webhookUrl = getEnvisionAnalyzeWebhookUrl();
   if (!webhookUrl) {
@@ -711,6 +740,7 @@ export async function analyzeVideo(
     throw new AnalyzeVideoError("Please enter a question about your video.");
   }
 
+  const creatorMode = Boolean(options?.creatorMode);
   const usage = await probeVideoMetadata(file);
 
   let formData: FormData;
@@ -727,6 +757,7 @@ export async function analyzeVideo(
     formData.append("question", trimmedQuestion);
     appendUsageToFormData(formData, usage, "pa");
   }
+  appendCreatorModeToFormData(formData, creatorMode);
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), STREAM_TIMEOUT_MS);
