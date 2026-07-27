@@ -264,16 +264,18 @@ export function EnvisionPage() {
             <div className="result-layout__main">
               <div className="result-thread" aria-label="Analysis conversation">
                 {askedQuestion ? (
-                  <div className="result-message result-message--user">
-                    <p className="result-message__label">Your question</p>
+                  <div
+                    className="result-message result-message--user"
+                    aria-label="Your question"
+                  >
                     <p className="result-message__text">{askedQuestion}</p>
                   </div>
                 ) : null}
 
-                <div className="result-message result-message--envision">
-                  <p className="result-message__label">
-                    {creatorMode ? "Envision · Creator Mode" : "Envision"}
-                  </p>
+                <div
+                  className="result-message result-message--envision"
+                  aria-label={creatorMode ? "Envision Creator Mode answer" : "Envision answer"}
+                >
                   <div
                     ref={resultBodyRef}
                     className={`result-body result-body--markdown ${isStreaming ? "result-body--streaming" : ""}`}
