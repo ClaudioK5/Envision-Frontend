@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useAuth } from "../auth/AuthProvider";
 import { FreeAnalysesBanner } from "../components/subscription/FreeAnalysesBanner";
 import { UpgradeEnvisionModal } from "../components/subscription/UpgradeEnvisionModal";
@@ -35,6 +37,7 @@ export function EnvisionPage() {
   const [loadingMessage, setLoadingMessage] = useState("Uploading your video…");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [result, setResult] = useState<string | null>(null);
+  const [askedQuestion, setAskedQuestion] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errorStep, setErrorStep] = useState<string | null>(null);
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
@@ -106,6 +109,7 @@ export function EnvisionPage() {
     setPhase("loading");
     setLoadingMessage("Uploading your video…");
     setUploadProgress(0);
+    setAskedQuestion(question.trim());
     setResult("");
     setErrorMessage(null);
     setErrorStep(null);
@@ -193,6 +197,7 @@ export function EnvisionPage() {
     abortRef.current = null;
     clearVideo();
     setQuestion("");
+    setAskedQuestion("");
     setResult(null);
     setUploadProgress(0);
     setErrorMessage(null);
@@ -257,11 +262,29 @@ export function EnvisionPage() {
 
           <div className="result-layout">
             <div className="result-layout__main">
-              <div
-                ref={resultBodyRef}
-                className={`result-body ${isStreaming ? "result-body--streaming" : ""}`}
-              >
-                {result}
+              <div className="result-thread" aria-label="Analysis conversation">
+                {askedQuestion ? (
+                  <div className="result-message result-message--user">
+                    <p className="result-message__label">Your question</p>
+                    <p className="result-message__text">{askedQuestion}</p>
+                  </div>
+                ) : null}
+
+                <div className="result-message result-message--envision">
+                  <p className="result-message__label">
+                    {creatorMode ? "Envision · Creator Mode" : "Envision"}
+                  </p>
+                  <div
+                    ref={resultBodyRef}
+                    className={`result-body result-body--markdown ${isStreaming ? "result-body--streaming" : ""}`}
+                  >
+                    {result ? (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{result}</ReactMarkdown>
+                    ) : isStreaming ? (
+                      <p className="result-body__placeholder">Writing your tips…</p>
+                    ) : null}
+                  </div>
+                </div>
               </div>
               {!isStreaming ? (
                 <button type="button" className="btn btn--primary" onClick={resetForm}>
