@@ -2,12 +2,25 @@
   --navy-dark: #0a1628;
   --navy-mid: #1e3a5f;
   --navy-light: #2a4f7a;
+  --gradient-mid: #1b3a6b;
   --accent: #4a90d9;
   --accent-bright: #6ba8e8;
   --accent-glow: rgba(74, 144, 217, 0.35);
+  --accent-soft-12: rgba(74, 144, 217, 0.12);
+  --accent-soft-28: rgba(74, 144, 217, 0.28);
+  --accent-soft-34: rgba(74, 144, 217, 0.34);
+  --accent-soft-40: rgba(74, 144, 217, 0.4);
+  --accent-soft-45: rgba(74, 144, 217, 0.45);
+  --accent-soft-55: rgba(74, 144, 217, 0.55);
 
   --bg: var(--navy-dark);
   --bg-elevated: rgba(30, 58, 95, 0.55);
+  --surface-ink: rgba(6, 14, 24, 0.62);
+  --surface-deep: rgba(10, 22, 40, 0.6);
+  --surface-deep-strong: rgba(10, 22, 40, 0.95);
+  --surface-mid: rgba(30, 58, 95, 0.4);
+  --user-bubble-from: rgba(74, 144, 217, 0.34);
+  --user-bubble-to: rgba(30, 58, 95, 0.62);
   --text: #f5f7fa;
   --text-muted: #a8b8cc;
   --border: rgba(255, 255, 255, 0.12);
@@ -18,6 +31,38 @@
   --radius: 12px;
   --radius-lg: 16px;
   --font: "DM Sans", system-ui, sans-serif;
+}
+
+/* Soft pink look for creators — catchy without changing app structure */
+html[data-theme="girlie"] {
+  --navy-dark: #1c0b16;
+  --navy-mid: #5a2140;
+  --navy-light: #8f3d68;
+  --gradient-mid: #7a2f58;
+  --accent: #ff5fa2;
+  --accent-bright: #ff9ec8;
+  --accent-glow: rgba(255, 95, 162, 0.42);
+  --accent-soft-12: rgba(255, 95, 162, 0.14);
+  --accent-soft-28: rgba(255, 95, 162, 0.28);
+  --accent-soft-34: rgba(255, 95, 162, 0.34);
+  --accent-soft-40: rgba(255, 95, 162, 0.42);
+  --accent-soft-45: rgba(255, 145, 190, 0.45);
+  --accent-soft-55: rgba(255, 95, 162, 0.55);
+
+  --bg: var(--navy-dark);
+  --bg-elevated: rgba(90, 33, 64, 0.55);
+  --surface-ink: rgba(28, 8, 18, 0.7);
+  --surface-deep: rgba(40, 14, 28, 0.72);
+  --surface-deep-strong: rgba(28, 8, 18, 0.96);
+  --surface-mid: rgba(90, 33, 64, 0.45);
+  --user-bubble-from: rgba(255, 95, 162, 0.4);
+  --user-bubble-to: rgba(122, 47, 88, 0.72);
+  --text: #fff5f9;
+  --text-muted: #e8b8cc;
+  --border: rgba(255, 190, 220, 0.18);
+  --shadow: rgba(40, 8, 24, 0.45);
+  --glass: rgba(42, 14, 30, 0.78);
+  --font: "Outfit", "DM Sans", system-ui, sans-serif;
 }
 
 *,
@@ -80,7 +125,7 @@ body {
 .navy-background__light {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--navy-mid) 0%, #1b3a6b 50%, var(--navy-light) 100%);
+  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--gradient-mid) 50%, var(--navy-light) 100%);
   clip-path: ellipse(140% 90% at 100% 100%);
 }
 
@@ -139,7 +184,74 @@ body {
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-deep-strong) 70%, transparent);
+  box-shadow: 0 6px 18px var(--shadow);
+}
+
+.theme-toggle__btn {
+  position: relative;
+  appearance: none;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  background: transparent;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theme-toggle__btn:hover {
+  color: var(--text);
+}
+
+.theme-toggle__btn--active {
+  color: var(--text);
+  background: var(--accent-soft-28);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.theme-toggle__btn--girlie.theme-toggle__btn--active {
+  background: linear-gradient(135deg, rgba(255, 95, 162, 0.45), rgba(255, 158, 200, 0.28));
+  color: #fff8fb;
+}
+
+.theme-toggle__spark {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent-bright) 45%, var(--accent));
+  box-shadow: 0 0 10px var(--accent-glow);
+  vertical-align: middle;
+}
+
+html[data-theme="girlie"] .logo__mark {
+  background: linear-gradient(135deg, #fff5f9, #ff9ec8 55%, #ff5fa2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="girlie"] .logo__icon {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 0 18px var(--accent-glow);
 }
 
 .header__profile-wrap {
@@ -193,7 +305,7 @@ body {
   padding: 0.35rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: rgba(10, 22, 40, 0.95);
+  background: var(--surface-deep-strong);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 24px var(--shadow);
 }
@@ -272,7 +384,7 @@ body {
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: rgba(6, 14, 24, 0.55);
+  background: var(--surface-ink);
 }
 
 .result-video {
@@ -395,7 +507,7 @@ body {
   font-size: 1rem;
   line-height: 1.55;
   color: var(--text);
-  background: rgba(10, 22, 40, 0.6);
+  background: var(--surface-deep);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   resize: vertical;
@@ -430,19 +542,19 @@ body {
   padding: 0.875rem 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: rgba(10, 22, 40, 0.45);
+  background: var(--surface-deep);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
 
 .creator-mode-toggle:hover {
-  border-color: rgba(74, 144, 217, 0.45);
-  background: rgba(30, 58, 95, 0.4);
+  border-color: var(--accent-soft-45);
+  background: var(--surface-mid);
 }
 
 .creator-mode-toggle:has(.creator-mode-toggle__input:checked) {
-  border-color: rgba(74, 144, 217, 0.55);
-  background: rgba(74, 144, 217, 0.12);
+  border-color: var(--accent-soft-55);
+  background: var(--accent-soft-12);
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
@@ -553,7 +665,7 @@ body {
   padding: 1.5rem;
   border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--border));
   border-radius: var(--radius-lg);
-  background: rgba(10, 22, 40, 0.45);
+  background: var(--surface-deep);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
@@ -566,7 +678,7 @@ body {
 
 .upload-zone--drag {
   border-color: var(--accent-bright);
-  background: rgba(74, 144, 217, 0.12);
+  background: var(--accent-soft-12);
 }
 
 .upload-zone--has-file {
@@ -722,7 +834,7 @@ body {
 }
 
 .btn--secondary:hover {
-  background: rgba(74, 144, 217, 0.12);
+  background: var(--accent-soft-12);
 }
 
 /* Result */
@@ -764,11 +876,11 @@ body {
   margin: 0;
   padding: 0.8rem 1.05rem;
   border-radius: 1.15rem;
-  border: 1px solid rgba(74, 144, 217, 0.4);
+  border: 1px solid var(--accent-soft-40);
   background: linear-gradient(
     155deg,
-    rgba(74, 144, 217, 0.34),
-    rgba(30, 58, 95, 0.62)
+    var(--user-bubble-from),
+    var(--user-bubble-to)
   );
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   font-size: 0.9875rem;
@@ -787,7 +899,7 @@ body {
   padding: 1.05rem 1.15rem;
   border-radius: 1.15rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(6, 14, 24, 0.62);
+  background: var(--surface-ink);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
   font-size: 1rem;
   line-height: 1.65;
@@ -871,7 +983,7 @@ body {
   margin: 0 0 0.9rem;
   padding: 0.55rem 0.85rem;
   border-left: 3px solid var(--accent);
-  background: rgba(74, 144, 217, 0.1);
+  background: var(--accent-soft-12);
   color: var(--text-muted);
 }
 
@@ -1009,7 +1121,7 @@ body {
   border: 1px solid var(--border);
   border-bottom: none;
   border-radius: 24px 24px 0 0;
-  background: rgba(10, 22, 40, 0.98);
+  background: var(--surface-deep-strong);
   backdrop-filter: blur(16px);
   color: var(--text);
   transform: translateY(100%);
@@ -1161,7 +1273,7 @@ body {
   padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: rgba(10, 22, 40, 0.98);
+  background: var(--surface-deep-strong);
   backdrop-filter: blur(16px);
   color: var(--text);
   transform: translateY(12px);
@@ -1196,7 +1308,7 @@ body {
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: rgba(30, 58, 95, 0.35);
+  background: var(--surface-mid);
 }
 
 .account-card__avatar {
@@ -1268,7 +1380,7 @@ body {
 }
 
 .toast--info {
-  background: rgba(10, 22, 40, 0.95);
+  background: var(--surface-deep-strong);
   color: var(--text);
   border: 1px solid var(--border);
 }
@@ -1434,6 +1546,15 @@ body {
 @media (max-width: 640px) {
   .header {
     padding: 0.75rem 1rem;
+  }
+
+  .theme-toggle__btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .logo__mark {
+    font-size: 1.1rem;
   }
 
   .main {
