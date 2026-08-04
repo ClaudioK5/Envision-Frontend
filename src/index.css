@@ -33,35 +33,35 @@
   --font: "DM Sans", system-ui, sans-serif;
 }
 
-/* Soft pink look for creators — catchy without changing app structure */
+/* Light strawberry look — soft pink, cream white, berry red accents */
 html[data-theme="girlie"] {
-  --navy-dark: #1c0b16;
-  --navy-mid: #5a2140;
-  --navy-light: #8f3d68;
-  --gradient-mid: #7a2f58;
-  --accent: #ff5fa2;
-  --accent-bright: #ff9ec8;
-  --accent-glow: rgba(255, 95, 162, 0.42);
-  --accent-soft-12: rgba(255, 95, 162, 0.14);
-  --accent-soft-28: rgba(255, 95, 162, 0.28);
-  --accent-soft-34: rgba(255, 95, 162, 0.34);
-  --accent-soft-40: rgba(255, 95, 162, 0.42);
-  --accent-soft-45: rgba(255, 145, 190, 0.45);
-  --accent-soft-55: rgba(255, 95, 162, 0.55);
+  --navy-dark: #fff5f8;
+  --navy-mid: #ffd6e5;
+  --navy-light: #ffb3cc;
+  --gradient-mid: #ffc2d6;
+  --accent: #e11d48;
+  --accent-bright: #fb7185;
+  --accent-glow: rgba(225, 29, 72, 0.28);
+  --accent-soft-12: rgba(225, 29, 72, 0.1);
+  --accent-soft-28: rgba(251, 113, 133, 0.28);
+  --accent-soft-34: rgba(251, 113, 133, 0.34);
+  --accent-soft-40: rgba(225, 29, 72, 0.35);
+  --accent-soft-45: rgba(255, 140, 170, 0.45);
+  --accent-soft-55: rgba(225, 29, 72, 0.5);
 
   --bg: var(--navy-dark);
-  --bg-elevated: rgba(90, 33, 64, 0.55);
-  --surface-ink: rgba(28, 8, 18, 0.7);
-  --surface-deep: rgba(40, 14, 28, 0.72);
-  --surface-deep-strong: rgba(28, 8, 18, 0.96);
-  --surface-mid: rgba(90, 33, 64, 0.45);
-  --user-bubble-from: rgba(255, 95, 162, 0.4);
-  --user-bubble-to: rgba(122, 47, 88, 0.72);
-  --text: #fff5f9;
-  --text-muted: #e8b8cc;
-  --border: rgba(255, 190, 220, 0.18);
-  --shadow: rgba(40, 8, 24, 0.45);
-  --glass: rgba(42, 14, 30, 0.78);
+  --bg-elevated: rgba(255, 255, 255, 0.78);
+  --surface-ink: rgba(255, 255, 255, 0.92);
+  --surface-deep: rgba(255, 255, 255, 0.82);
+  --surface-deep-strong: rgba(255, 250, 252, 0.95);
+  --surface-mid: rgba(255, 214, 229, 0.65);
+  --user-bubble-from: rgba(251, 113, 133, 0.35);
+  --user-bubble-to: rgba(255, 182, 204, 0.75);
+  --text: #4a1020;
+  --text-muted: #9a4a62;
+  --border: rgba(225, 29, 72, 0.16);
+  --shadow: rgba(180, 40, 80, 0.12);
+  --glass: rgba(255, 255, 255, 0.82);
   --font: "Outfit", "DM Sans", system-ui, sans-serif;
 }
 
@@ -242,7 +242,7 @@ body {
 }
 
 html[data-theme="girlie"] .logo__mark {
-  background: linear-gradient(135deg, #fff5f9, #ff9ec8 55%, #ff5fa2);
+  background: linear-gradient(135deg, #e11d48, #fb7185 50%, #ff9eb5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -250,8 +250,21 @@ html[data-theme="girlie"] .logo__mark {
 
 html[data-theme="girlie"] .logo__icon {
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
-    0 0 18px var(--accent-glow);
+    0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 0 16px var(--accent-glow);
+}
+
+html[data-theme="girlie"] .theme-toggle__btn--girlie.theme-toggle__btn--active {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.92), rgba(251, 113, 133, 0.85));
+  color: #fff;
+}
+
+html[data-theme="girlie"] .btn--primary {
+  color: #fff;
+}
+
+html[data-theme="girlie"] .result-body--markdown strong {
+  color: #4a1020;
 }
 
 .header__profile-wrap {
