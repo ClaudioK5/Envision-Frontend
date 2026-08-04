@@ -4,6 +4,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { AccountMenu } from "./AccountMenu";
 import { AccountModal } from "./AccountModal";
 import { EnvisionLogo } from "./EnvisionLogo";
+import { ThemeToggle } from "./ThemeToggle";
 import { UserIcon } from "./Icons";
 
 export function Layout() {
@@ -55,6 +56,7 @@ export function Layout() {
         </div>
 
         <div className="header__actions">
+          <ThemeToggle />
           <div className="header__profile-wrap">
             <button
               ref={profileRef}
