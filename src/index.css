@@ -49,9 +49,9 @@ html[data-theme="classic"] {
   --user-bubble-to: color-mix(in srgb, #ff8a1f 32%, #fff9f2);
   --text: #321d17;
   --text-muted: #8a594a;
-  --border: color-mix(in srgb, #ff8a1f 32%, #fff4e6);
-  --shadow: rgba(50, 29, 23, 0.1);
-  --glass: #fffdf8;
+  --border: color-mix(in srgb, #ff8a1f 22%, #fff4e6);
+  --shadow: rgba(50, 29, 23, 0.07);
+  --glass: #fffdf9;
 
   --header-height: 64px;
   --radius: 12px;
@@ -153,18 +153,22 @@ body {
 .navy-background__light {
   position: absolute;
   inset: 0;
-  /* Large decorative shape: vivid yellow → orange → coral-red */
+  /* Soft mango ribbon — creamier, less intense than solid fruit colors */
   background: linear-gradient(
     145deg,
-    #ffd12f 0%,
-    #ffce32 18%,
-    #ff9d24 42%,
-    #ff8a1f 62%,
-    #f04438 82%,
-    #d93832 100%
+    color-mix(in srgb, #ffd12f 55%, #fff9f2) 0%,
+    color-mix(in srgb, #ffce32 48%, #fff8ef) 22%,
+    color-mix(in srgb, #ff9d24 42%, #fff4e6) 48%,
+    color-mix(in srgb, #ff8a1f 38%, #fff3e6) 68%,
+    color-mix(in srgb, #f04438 28%, #fff4e6) 88%,
+    color-mix(in srgb, #d93832 22%, #fff9f2) 100%
   );
   clip-path: ellipse(140% 90% at 100% 100%);
-  opacity: 0.92;
+  opacity: 0.48;
+}
+
+html[data-theme="classic"] .navy-background__light {
+  opacity: 0.42;
 }
 
 @media (min-width: 768px) {
@@ -357,14 +361,13 @@ html[data-theme="classic"] .result-kicker {
 }
 
 html[data-theme="classic"] .content-card {
-  border: 1.5px solid color-mix(in srgb, #ff8a1f 38%, #fff4e6);
+  border: 1px solid color-mix(in srgb, #ff8a1f 22%, #fff4e6);
   background:
-    radial-gradient(ellipse 80% 55% at 100% 0%, color-mix(in srgb, #ffd12f 18%, transparent), transparent 65%),
-    linear-gradient(180deg, #fffdf9 0%, #fff8ef 50%, #fff3e6 100%);
+    radial-gradient(ellipse 70% 50% at 100% 0%, color-mix(in srgb, #ffd12f 10%, transparent), transparent 70%),
+    linear-gradient(180deg, #fffdf9 0%, #fff8ef 52%, #fff3e6 100%);
   box-shadow:
-    0 18px 48px rgba(50, 29, 23, 0.08),
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 0 0 1px color-mix(in srgb, #ffd12f 18%, transparent);
+    0 16px 40px rgba(50, 29, 23, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.98) inset;
 }
 
 html[data-theme="classic"] .envision-form__textarea,
