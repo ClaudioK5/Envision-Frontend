@@ -22,6 +22,7 @@ import {
   writeLastMeSyncedAt,
 } from "./meSyncPolicy";
 import { PulseAuthError, registerPulseAccount } from "./registerPulseAccount";
+import { trackEnvisionSignin } from "./trackEnvisionSignin";
 import {
   clearSessionRaw,
   readSessionRaw,
@@ -302,6 +303,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         persistSession(nextSession);
         await syncMeFromApi(nextSession);
+        void trackEnvisionSignin();
         setModalVisible(false);
         setModalTitle(undefined);
         setModalSubtitle(undefined);
