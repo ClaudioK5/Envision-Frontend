@@ -33,7 +33,7 @@ function applyThemeToDocument(theme: EnvisionTheme) {
   document.documentElement.dataset.theme = theme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    meta.setAttribute("content", theme === "girlie" ? "#fff5f8" : "#fff8f0");
+    meta.setAttribute("content", theme === "girlie" ? "#fff5f8" : "#140c08");
   }
 }
 
