@@ -8,7 +8,9 @@ type Props = {
 export function EnvisionLogo({ className, size = 36 }: Props) {
   const { theme } = useTheme();
   const src =
-    theme === "girlie" ? "/envision-logo-girlie.png" : "/envision-logo.png";
+    theme === "girlie"
+      ? "/envision-logo-girlie.png"
+      : "/envision-logo-mango.png";
 
   return (
     <img
