@@ -1,56 +1,59 @@
 :root,
 html[data-theme="classic"] {
   /*
-   * Mango Classic — cream base + visible mango ribbon
-   * (~15% softer than full fruit; peach-coral end, no deep red)
+   * Mango Classic — pulled from ripe mango fruit:
+   * cream milkshake base + sunny yellow → orange → soft coral blush
+   * tiny stem green; no deep depressing red
    */
-  --cream-0: #fffdf9;
-  --cream-1: #fff9f2;
-  --cream-2: #fff3e6;
-  --cream-mid: #fff8ef;
+  --cream-0: #fffcf0;
+  --cream-1: #fff9c2;
+  --cream-2: #ffefb0;
+  --cream-mid: #fff6d0;
   --mango-yellow: #ffd12f;
-  --mango-yellow-alt: #ffce32;
+  --mango-yellow-alt: #ffc30b;
   --mango-orange: #ff8a1f;
   --mango-orange-mid: #ff9d24;
-  --mango-orange-deep: #ff7a1a;
-  --mango-coral: #ff8f6b;
-  --mango-coral-mid: #ff7a5c;
-  --mango-red: #ff6b52;
-  --mango-green: #86b93b;
+  --mango-orange-deep: #ff8c00;
+  --mango-coral: #ff7f50;
+  --mango-coral-mid: #ff8f6b;
+  --mango-red: #f04438;
+  --mango-red-bright: #ff3d2e;
+  --mango-red-deep: #e94b3c;
+  --mango-green: #9acd32;
 
-  --navy-dark: #fff9f2;
-  --navy-mid: #fff4e6;
+  --navy-dark: #fff9c2;
+  --navy-mid: #ffefb0;
   --navy-light: #ffd12f;
   --gradient-mid: #ff8a1f;
   --accent: #ff8a1f;
   --accent-bright: #ffd12f;
-  --accent-strong: #ff7a1a;
-  --accent-hover: #ff7a5c;
-  --accent-coral: #ff8f6b;
-  --accent-red: #ff6b52;
-  --accent-deep: #ff7a5c;
-  --accent-glow: rgba(255, 209, 47, 0.42);
-  --accent-soft-12: color-mix(in srgb, #ffd12f 16%, #fffdf9);
-  --accent-soft-28: color-mix(in srgb, #ff8a1f 26%, #fff9f2);
-  --accent-soft-34: color-mix(in srgb, #ff9d24 32%, #fff4e6);
+  --accent-strong: #ff8c00;
+  --accent-hover: #f04438;
+  --accent-coral: #ff7f50;
+  --accent-red: #f04438;
+  --accent-deep: #e94b3c;
+  --accent-glow: rgba(255, 209, 47, 0.4);
+  --accent-soft-12: color-mix(in srgb, #ffd12f 16%, #fffcf0);
+  --accent-soft-28: color-mix(in srgb, #ff8a1f 26%, #fff9c2);
+  --accent-soft-34: color-mix(in srgb, #ff9d24 32%, #ffefb0);
   --accent-soft-40: color-mix(in srgb, #ff8a1f 38%, transparent);
   --accent-soft-45: color-mix(in srgb, #ffd12f 42%, transparent);
-  --accent-soft-55: color-mix(in srgb, #ff8f6b 48%, transparent);
-  --leaf: #86b93b;
+  --accent-soft-55: color-mix(in srgb, #f04438 42%, transparent);
+  --leaf: #9acd32;
 
-  --bg: #fff9f2;
-  --bg-elevated: #fffdf9;
-  --surface-ink: #fffdf9;
-  --surface-deep: #fff4e6;
-  --surface-deep-strong: #fffdf9;
-  --surface-mid: #fff8ef;
-  --user-bubble-from: color-mix(in srgb, #ffd12f 40%, #fffdf9);
-  --user-bubble-to: color-mix(in srgb, #ff8a1f 30%, #fff9f2);
+  --bg: #fff9c2;
+  --bg-elevated: #fffcf0;
+  --surface-ink: #fffcf0;
+  --surface-deep: #fff8dc;
+  --surface-deep-strong: #fffcf0;
+  --surface-mid: #fff6d0;
+  --user-bubble-from: color-mix(in srgb, #ffd12f 42%, #fffcf0);
+  --user-bubble-to: color-mix(in srgb, #ff8a1f 30%, #fff9c2);
   --text: #321d17;
   --text-muted: #8a594a;
-  --border: color-mix(in srgb, #ff8a1f 28%, #fff4e6);
+  --border: color-mix(in srgb, #ff8a1f 28%, #ffefb0);
   --shadow: rgba(50, 29, 23, 0.08);
-  --glass: #fffdf9;
+  --glass: color-mix(in srgb, #fff9c2 88%, transparent);
 
   --header-height: 64px;
   --radius: 12px;
@@ -145,32 +148,34 @@ body {
 .navy-background__dark {
   position: absolute;
   inset: 0;
-  /* Global warm milkshake base */
-  background: #fff9f2;
+  /* Mango milkshake yellow */
+  background: #fff9c2;
 }
 
 .navy-background__light {
   position: absolute;
   inset: 0;
   /*
-   * Visible mango diagonal (like before), ~15% softer:
-   * solid-ish yellow → orange → peach-coral (not deep red, not washed white)
+   * Ripe mango skin blend — soft organic stops like the fruit photo:
+   * sunny yellow → warm orange → coral blush (cheerful, not dark red)
    */
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, #ffd12f 88%, #fff9f2) 0%,
-    color-mix(in srgb, #ffce32 85%, #fff8ef) 18%,
-    color-mix(in srgb, #ff9d24 86%, #fff4e6) 42%,
-    color-mix(in srgb, #ff8a1f 84%, #fff3e6) 62%,
-    color-mix(in srgb, #ff8f6b 82%, #fff4e6) 82%,
-    color-mix(in srgb, #ff7a5c 80%, #fff6ec) 100%
+    color-mix(in srgb, #ffc30b 12%, #fffdf8) 0%,
+    #ffd12f 14%,
+    #ffc30b 28%,
+    #ff9d24 48%,
+    #ff8a1f 64%,
+    #ff8c00 76%,
+    #ff7f50 90%,
+    #ff8f6b 100%
   );
   clip-path: ellipse(140% 90% at 100% 100%);
-  opacity: 0.82;
+  opacity: 0.88;
 }
 
 html[data-theme="classic"] .navy-background__light {
-  opacity: 0.84;
+  opacity: 0.9;
 }
 
 @media (min-width: 768px) {
@@ -210,7 +215,7 @@ html[data-theme="classic"] .navy-background__light {
 
 .logo__mark {
   color: var(--text);
-  background: linear-gradient(135deg, #ffd12f 0%, #ff8a1f 50%, #ff8f6b 100%);
+  background: linear-gradient(135deg, #ffd12f 0%, #ff8a1f 48%, #ff7f50 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -267,20 +272,20 @@ html[data-theme="classic"] .navy-background__light {
 }
 
 .theme-toggle__btn--active {
-  color: #fffdf9;
+  color: #fffdf8;
   font-weight: 700;
-  background: linear-gradient(135deg, #ff9d24 0%, #ff8a1f 100%);
+  background: linear-gradient(135deg, #ff8a1f 0%, #ff3d2e 55%, #f04438 100%);
   box-shadow:
-    0 2px 12px color-mix(in srgb, #ff8a1f 40%, transparent),
+    0 2px 14px color-mix(in srgb, #f04438 42%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 html[data-theme="classic"] .theme-toggle__btn--active:hover {
-  background: linear-gradient(135deg, #ff8f6b 0%, #ff7a5c 100%);
+  background: linear-gradient(135deg, #f04438 0%, #e94b3c 100%);
 }
 
 html[data-theme="classic"] .theme-toggle__spark {
-  background: radial-gradient(circle at 30% 30%, #fffdf9, #ffd12f 42%, #86b93b);
+  background: radial-gradient(circle at 30% 30%, #fffdf8, #ffd12f 40%, #9acd32);
 }
 
 .theme-toggle__btn--girlie.theme-toggle__btn--active {
@@ -359,14 +364,14 @@ html[data-theme="classic"] .result-body--markdown li::marker {
 }
 
 html[data-theme="classic"] .result-kicker {
-  color: #ff7a1a;
+  color: #ff8c00;
 }
 
 html[data-theme="classic"] .content-card {
-  border: 1.5px solid color-mix(in srgb, #ff8a1f 32%, #fff4e6);
+  border: 1.5px solid color-mix(in srgb, #ff8a1f 30%, #fef9e7);
   background:
-    radial-gradient(ellipse 75% 50% at 100% 0%, color-mix(in srgb, #ffd12f 14%, transparent), transparent 68%),
-    linear-gradient(180deg, #fffdf9 0%, #fff8ef 52%, #fff3e6 100%);
+    radial-gradient(ellipse 75% 50% at 100% 0%, color-mix(in srgb, #ffd12f 16%, transparent), transparent 68%),
+    linear-gradient(180deg, #fffdf8 0%, #fff8ef 50%, #fef9e7 100%);
   box-shadow:
     0 16px 44px rgba(50, 29, 23, 0.07),
     0 1px 0 rgba(255, 255, 255, 0.95) inset;
@@ -374,8 +379,8 @@ html[data-theme="classic"] .content-card {
 
 html[data-theme="classic"] .envision-form__textarea,
 html[data-theme="classic"] .upload-zone {
-  background: #fffdf9;
-  border-color: color-mix(in srgb, #ff8a1f 36%, #fff4e6);
+  background: #fffdf8;
+  border-color: color-mix(in srgb, #ff8a1f 34%, #fef9e7);
 }
 
 html[data-theme="classic"] .envision-form__textarea:focus,
@@ -388,77 +393,77 @@ html[data-theme="classic"] .upload-zone:focus {
 
 html[data-theme="classic"] .upload-zone--drag {
   border-color: #ffd12f;
-  background: color-mix(in srgb, #ffd12f 14%, #fffdf9);
+  background: color-mix(in srgb, #ffd12f 14%, #fffdf8);
   box-shadow: 0 0 0 4px color-mix(in srgb, #ffd12f 30%, transparent);
 }
 
 html[data-theme="classic"] .creator-mode-toggle {
-  background: #fffdf9;
-  border-color: color-mix(in srgb, #ff8a1f 32%, #fff4e6);
+  background: #fffdf8;
+  border-color: color-mix(in srgb, #ff8a1f 30%, #fef9e7);
 }
 
 html[data-theme="classic"] .creator-mode-toggle:hover {
   border-color: #ff8a1f;
-  background: #fff4e6;
+  background: #fef9e7;
 }
 
 html[data-theme="classic"] .creator-mode-toggle:has(.creator-mode-toggle__input:checked) {
   border-color: #ff8a1f;
-  background: color-mix(in srgb, #ffd12f 14%, #fffdf9);
+  background: color-mix(in srgb, #ffd12f 14%, #fffdf8);
   box-shadow: 0 0 0 3px color-mix(in srgb, #ff8a1f 24%, transparent);
 }
 
 html[data-theme="classic"] .creator-mode-toggle__input:checked + .creator-mode-toggle__switch {
-  background: linear-gradient(135deg, #ff9d24 0%, #ff8a1f 100%);
+  background: linear-gradient(135deg, #ff8a1f 0%, #f04438 100%);
 }
 
 html[data-theme="classic"] .btn--primary {
-  color: #fffdf9;
-  background: linear-gradient(135deg, #ff9d24 0%, #ff8a1f 48%, #ff8f6b 100%);
+  color: #fffdf8;
+  background: linear-gradient(135deg, #ff8a1f 0%, #ff3d2e 52%, #f04438 100%);
   box-shadow:
-    0 6px 20px color-mix(in srgb, #ff8a1f 36%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    0 6px 22px color-mix(in srgb, #f04438 40%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
 html[data-theme="classic"] .btn--primary:not(:disabled):hover {
-  background: linear-gradient(135deg, #ff8f6b 0%, #ff7a5c 100%);
+  background: linear-gradient(135deg, #f04438 0%, #e94b3c 100%);
 }
 
 html[data-theme="classic"] .btn--secondary {
-  color: #ff7a1a;
-  background: #fffdf9;
-  border: 2px solid #ff8a1f;
+  color: #f04438;
+  background: #fffdf8;
+  border: 2px solid #ff3d2e;
 }
 
 html[data-theme="classic"] .btn--secondary:hover {
-  color: #ff7a5c;
-  border-color: #ff8f6b;
-  background: color-mix(in srgb, #ffd12f 12%, #fffdf9);
+  color: #e94b3c;
+  border-color: #f04438;
+  background: color-mix(in srgb, #ff3d2e 10%, #fffdf8);
 }
 
 html[data-theme="classic"] .result-message--user .result-message__text {
   border-color: #ff8a1f;
   background: linear-gradient(
     155deg,
-    color-mix(in srgb, #ffd12f 44%, #fffdf9),
-    color-mix(in srgb, #ff8a1f 32%, #fff9f2)
+    color-mix(in srgb, #ffd12f 44%, #fffdf8),
+    color-mix(in srgb, #ff8a1f 32%, #fff9f0)
   );
   box-shadow: 0 8px 22px color-mix(in srgb, #ff8a1f 18%, transparent);
 }
 
 html[data-theme="classic"] .result-body {
-  border: 1px solid color-mix(in srgb, #ff8a1f 26%, #fff4e6);
-  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, #ff8a1f 26%, #fef9e7);
+  background: #fffdf8;
   box-shadow: 0 10px 28px rgba(50, 29, 23, 0.07);
 }
 
 html[data-theme="classic"] .envision-form__error {
-  border: 1px solid color-mix(in srgb, #ff8f6b 42%, #fff4e6);
-  background: color-mix(in srgb, #ff8f6b 9%, #fffdf9);
+  border: 1px solid color-mix(in srgb, #ff7f50 42%, #fef9e7);
+  background: color-mix(in srgb, #ff7f50 9%, #fffdf8);
 }
 
 html[data-theme="classic"] .envision-form__error-step {
-  color: #ff7a5c;
+  color: #ff7f50;
 }
 
 html[data-theme="classic"] .envision-form__error p {
@@ -1668,16 +1673,16 @@ html[data-theme="girlie"] .result-body--markdown strong {
 }
 
 html[data-theme="classic"] .upgrade-pro-btn--primary {
-  color: #fffdf9;
-  background: linear-gradient(135deg, #ff9d24 0%, #ff8a1f 48%, #ff8f6b 100%);
+  color: #fffdf8;
+  background: linear-gradient(135deg, #ff8a1f 0%, #ff3d2e 52%, #f04438 100%);
   box-shadow:
-    0 6px 20px color-mix(in srgb, #ff8a1f 36%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    0 6px 22px color-mix(in srgb, #f04438 40%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
   filter: none;
 }
 
 html[data-theme="classic"] .upgrade-pro-btn--primary:hover {
-  background: linear-gradient(135deg, #ff8f6b 0%, #ff7a5c 100%);
+  background: linear-gradient(135deg, #f04438 0%, #e94b3c 100%);
   filter: none;
 }
 
