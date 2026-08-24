@@ -1,7 +1,7 @@
 import type { EnvisionSubscription } from "../auth/types";
 
 export const ENVISION_FREE_LIMIT = 3;
-export const ENVISION_PRO_PRICE_LABEL = "$2.99/month";
+export const ENVISION_PRO_PRICE_LABEL = "$8.99/month";
 
 export type EnvisionBillingState = {
   analysesUsed: number;
@@ -40,7 +40,7 @@ export function parseEnvisionSubscription(
         ? raw.price_usd
         : typeof (raw as Record<string, unknown>).price_eur === "number"
           ? ((raw as Record<string, unknown>).price_eur as number)
-          : 2.99,
+          : 8.99,
   };
 }
 
