@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
+import {
+  confirmEnvisionCheckoutSession,
+  ConfirmCheckoutError,
+} from "../../auth/confirmEnvisionCheckoutSession";
+import { getPulseJwt } from "../../auth/pulseClient";
 import { isEnvisionPro } from "../../subscription/envisionBillingUtils";
 import { PaymentSuccessModal } from "./PaymentSuccessModal";
 
-const POLL_MS = 1500;
-const MAX_POLLS = 24;
+/** Fallback if session_id is missing or confirm fails (old webhook race). */
+const POLL_MS = 800;
+const MAX_POLLS = 15;
 
 export function PaymentSuccessHandler() {
   const navigate = useNavigate();
@@ -21,7 +27,9 @@ export function PaymentSuccessHandler() {
     if (params.get("payment") !== "success") return;
     flowStartedRef.current = true;
 
+    const checkoutSessionId = (params.get("session_id") || "").trim();
     params.delete("payment");
+    params.delete("session_id");
     const qs = params.toString();
     navigate(
       {
@@ -36,21 +44,51 @@ export function PaymentSuccessHandler() {
 
     let cancelled = false;
 
-    const poll = async () => {
+    const pollUntilPro = async () => {
       for (let attempt = 0; attempt < MAX_POLLS && !cancelled; attempt += 1) {
         const session = await refreshUserProfile({ force: true });
         if (isEnvisionPro(session?.user?.envision ?? null)) {
-          setSyncing(false);
-          return;
+          return true;
         }
         if (attempt < MAX_POLLS - 1) {
           await new Promise((resolve) => window.setTimeout(resolve, POLL_MS));
         }
       }
-      if (!cancelled) setSyncing(false);
+      return false;
     };
 
-    void poll();
+    const activate = async () => {
+      try {
+        if (checkoutSessionId.startsWith("cs_")) {
+          const token = getPulseJwt();
+          if (token) {
+            try {
+              const result = await confirmEnvisionCheckoutSession(
+                token,
+                checkoutSessionId,
+              );
+              if (isEnvisionPro(result.envision)) {
+                await refreshUserProfile({ force: true });
+                return;
+              }
+            } catch (e) {
+              if (import.meta.env.DEV) {
+                console.warn(
+                  "[Envision] confirm-checkout failed; falling back to poll",
+                  e instanceof ConfirmCheckoutError ? e.message : e,
+                );
+              }
+            }
+          }
+        }
+
+        await pollUntilPro();
+      } finally {
+        if (!cancelled) setSyncing(false);
+      }
+    };
+
+    void activate();
 
     return () => {
       cancelled = true;
