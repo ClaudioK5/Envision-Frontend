@@ -1440,7 +1440,8 @@ html[data-theme="girlie"] .result-body--markdown strong {
 
 .auth-google-btn-wrap {
   position: relative;
-  min-height: 48px;
+  width: 100%;
+  height: 48px;
 }
 
 .auth-google-btn-label {
@@ -1460,20 +1461,32 @@ html[data-theme="girlie"] .result-body--markdown strong {
   pointer-events: none;
 }
 
+/* Invisible Google hit-target stretched to match the full visible button. */
 .auth-google-btn-overlay {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
+  overflow: hidden;
   opacity: 0.01;
-  min-height: 48px;
 }
 
 .auth-google-btn-overlay--disabled {
   pointer-events: none;
 }
 
+.auth-google-btn-overlay__hit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: left top;
+}
+
+.auth-google-btn-overlay__hit > div,
 .auth-google-btn-overlay iframe {
   width: 100% !important;
-  min-height: 48px !important;
+  max-width: none !important;
+  height: 40px !important;
+  min-height: 40px !important;
 }
 
 .auth-modal-error {
