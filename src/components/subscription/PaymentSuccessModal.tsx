@@ -18,7 +18,8 @@ export function PaymentSuccessModal({ open, syncing, onContinue }: Props) {
       >
         <div className="trial-expired-modal__glow" aria-hidden />
         <EnvisionLogo className="trial-expired-modal__logo" size={64} />
-        <h2 id="payment-success-title" className="trial-expired-modal__title">          Welcome to Envision Pro
+        <h2 id="payment-success-title" className="trial-expired-modal__title">
+          Welcome to Visorixs Pro
         </h2>
         <p className="trial-expired-modal__body">
           {syncing
