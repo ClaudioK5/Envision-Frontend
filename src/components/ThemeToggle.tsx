@@ -12,7 +12,7 @@ export function ThemeToggle() {
     <div
       className="theme-toggle"
       role="group"
-      aria-label="Choose Envision look"
+      aria-label="Choose Visorixs look"
     >
       {OPTIONS.map((option) => {
         const active = theme === option.id;
