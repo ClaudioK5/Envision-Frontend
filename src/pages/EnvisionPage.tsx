@@ -251,10 +251,10 @@ export function EnvisionPage() {
           </p>
           <h2 className="result-title">
             {isStreaming
-              ? "Envision is writing…"
+              ? "Visorixs is writing…"
               : creatorMode
                 ? "Here's how to improve this video"
-                : "Here's what Envision found"}
+                : "Here's what Visorixs found"}
           </h2>
           {isStreaming ? (
             <p className="result-status">{loadingMessage}</p>
@@ -274,7 +274,7 @@ export function EnvisionPage() {
 
                 <div
                   className="result-message result-message--envision"
-                  aria-label={creatorMode ? "Envision Creator Mode answer" : "Envision answer"}
+                  aria-label={creatorMode ? "Visorixs Creator Mode answer" : "Visorixs answer"}
                 >
                   <div
                     ref={resultBodyRef}
@@ -471,7 +471,7 @@ export function EnvisionPage() {
           ) : null}
 
           <button type="submit" className="btn btn--primary" disabled={!canSubmit}>
-            {creatorMode ? "Ask Envision · Creator Mode" : "Ask Envision"}
+            {creatorMode ? "Ask Visorixs · Creator Mode" : "Ask Visorixs"}
           </button>
 
           <p className="envision-form__footer-hint">
