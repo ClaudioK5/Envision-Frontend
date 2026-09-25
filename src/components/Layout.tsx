@@ -31,7 +31,7 @@ export function Layout() {
         },
         {
           modalTitle: "Sign in to your account",
-          modalSubtitle: "Connect with Google to manage your Envision session.",
+          modalSubtitle: "Connect with Google to manage your Visorixs session.",
         },
       );
     })();
@@ -50,9 +50,9 @@ export function Layout() {
       </div>
 
       <header className="header">
-        <div className="logo" aria-label="Envision home">
+        <div className="logo" aria-label="Visorixs home">
           <EnvisionLogo className="logo__icon" size={36} />
-          <span className="logo__mark">Envision</span>
+          <span className="logo__mark">Visorixs</span>
         </div>
 
         <div className="header__actions">
