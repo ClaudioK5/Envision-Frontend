@@ -15,7 +15,7 @@ type Props = {
 export function UpgradeEnvisionButton({
   variant = "primary",
   className = "",
-  label = "Upgrade to Envision Pro",
+  label = "Upgrade to Visorixs Pro",
 }: Props) {
   const { pulseToken, isAuthenticated, requireAuth } = useAuth();
   const { showToast } = useToast();
@@ -50,7 +50,7 @@ export function UpgradeEnvisionButton({
     }
     void requireAuth(startCheckout, {
       modalTitle: "Sign in to upgrade",
-      modalSubtitle: "Connect with Google to subscribe to Envision Pro.",
+      modalSubtitle: "Connect with Google to subscribe to Visorixs Pro.",
     });
   };
 
