@@ -33,7 +33,7 @@ export function UpgradeEnvisionModal({ open, onClose }: Props) {
         <h2 id="envision-upgrade-title" className="trial-expired-modal__title">          You&apos;ve used your {ENVISION_FREE_LIMIT} free analyses
         </h2>
         <p className="trial-expired-modal__body">
-          Upgrade to Envision Pro to keep analyzing videos with large-file cloud upload.
+          Upgrade to Visorixs Pro to keep analyzing videos with large-file cloud upload.
         </p>
         <div className="trial-expired-modal__pricing">
           <p>{ENVISION_PRO_PRICE_LABEL}</p>
