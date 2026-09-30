@@ -622,10 +622,22 @@ function streamAnalyzeRequest(
   });
 }
 
-function appendCreatorModeToFormData(formData: FormData, creatorMode: boolean): void {
-  if (creatorMode) {
+function appendAnalysisModeToFormData(
+  formData: FormData,
+  analysisMode: AnalyzeVideoOptions["analysisMode"] = "general",
+): void {
+  const mode = analysisMode || "general";
+  formData.append("analysis_mode", mode);
+  // Legacy flag for older backend builds.
+  if (mode === "creator") {
     formData.append("creator_mode", "1");
   }
+}
+
+function statusMessageForMode(mode: AnalyzeVideoOptions["analysisMode"]): string {
+  if (mode === "creator") return "Reviewing your video as a creator strategist…";
+  if (mode === "podcast") return "Reviewing your episode as a podcast analyst…";
+  return "Analyzing your video…";
 }
 
 function streamAnalyzeWithObjectKey(
@@ -635,7 +647,7 @@ function streamAnalyzeWithObjectKey(
   usage: VideoUsageMetadata,
   callbacks: AnalyzeStreamCallbacks,
   signal?: AbortSignal,
-  creatorMode = false,
+  analysisMode: AnalyzeVideoOptions["analysisMode"] = "general",
 ): Promise<AnalyzeVideoResult> {
   const formData = new FormData();
   formData.append("object_key", objectKey);
@@ -644,12 +656,8 @@ function streamAnalyzeWithObjectKey(
     formData.append("expected_size", String(expectedSize));
   }
   appendUsageToFormData(formData, usage, "r2");
-  appendCreatorModeToFormData(formData, creatorMode);
-  callbacks.onStatus?.(
-    creatorMode
-      ? "Reviewing your video as a creator strategist…"
-      : "Analyzing your video…",
-  );
+  appendAnalysisModeToFormData(formData, analysisMode);
+  callbacks.onStatus?.(statusMessageForMode(analysisMode));
   return streamAnalyzeRequest(formData, callbacks, signal);
 }
 
@@ -659,19 +667,29 @@ function streamAnalyzeWithFile(
   usage: VideoUsageMetadata,
   callbacks: AnalyzeStreamCallbacks,
   signal?: AbortSignal,
-  creatorMode = false,
+  analysisMode: AnalyzeVideoOptions["analysisMode"] = "general",
 ): Promise<AnalyzeVideoResult> {
   const formData = new FormData();
   formData.append("video", file, file.name);
   formData.append("question", question);
   appendUsageToFormData(formData, usage, "pa");
-  appendCreatorModeToFormData(formData, creatorMode);
+  appendAnalysisModeToFormData(formData, analysisMode);
   return streamAnalyzeRequest(formData, callbacks, signal, true);
 }
 
 export type AnalyzeVideoOptions = {
+  analysisMode?: "general" | "creator" | "podcast";
+  /** @deprecated Use analysisMode: "creator" */
   creatorMode?: boolean;
 };
+
+function resolveAnalysisMode(
+  options?: AnalyzeVideoOptions,
+): "general" | "creator" | "podcast" {
+  if (options?.analysisMode) return options.analysisMode;
+  if (options?.creatorMode) return "creator";
+  return "general";
+}
 
 /** Stream analysis via SSE — upload progress + live answer text. */
 export async function analyzeVideoStream(
@@ -691,7 +709,7 @@ export async function analyzeVideoStream(
     throw new AnalyzeVideoError("Please enter a question about your video.");
   }
 
-  const creatorMode = Boolean(options?.creatorMode);
+  const analysisMode = resolveAnalysisMode(options);
   const usage = await probeVideoMetadata(file);
 
   if (file.size > PA_MAX_BYTES) {
@@ -703,7 +721,7 @@ export async function analyzeVideoStream(
       usage,
       callbacks,
       signal,
-      creatorMode,
+      analysisMode,
     );
   }
 
@@ -713,7 +731,7 @@ export async function analyzeVideoStream(
     usage,
     callbacks,
     signal,
-    creatorMode,
+    analysisMode,
   );
 }
 
@@ -740,7 +758,7 @@ export async function analyzeVideo(
     throw new AnalyzeVideoError("Please enter a question about your video.");
   }
 
-  const creatorMode = Boolean(options?.creatorMode);
+  const analysisMode = resolveAnalysisMode(options);
   const usage = await probeVideoMetadata(file);
 
   let formData: FormData;
@@ -757,7 +775,7 @@ export async function analyzeVideo(
     formData.append("question", trimmedQuestion);
     appendUsageToFormData(formData, usage, "pa");
   }
-  appendCreatorModeToFormData(formData, creatorMode);
+  appendAnalysisModeToFormData(formData, analysisMode);
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), STREAM_TIMEOUT_MS);
