@@ -1,10 +1,22 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import {
+  ANALYSIS_MODES,
+  getAnalysisModeOption,
+  modeHasPromptActions,
+  type AnalysisMode,
+} from "../analysis/analysisModes";
 import { useAuth } from "../auth/AuthProvider";
 import { FreeAnalysesBanner } from "../components/subscription/FreeAnalysesBanner";
 import { UpgradeEnvisionModal } from "../components/subscription/UpgradeEnvisionModal";
-import { UploadIcon, VideoIcon } from "../components/Icons";
+import {
+  ModeCreatorIcon,
+  ModeGeneralIcon,
+  ModePodcastIcon,
+  UploadIcon,
+  VideoIcon,
+} from "../components/Icons";
 import {
   analyzeVideoStream,
   AnalyzeVideoError,
@@ -18,6 +30,12 @@ import { useEnvisionBilling } from "../subscription/useEnvisionBilling";
 
 type FlowPhase = "form" | "loading" | "streaming" | "success" | "error";
 
+function ModeIcon({ mode }: { mode: AnalysisMode }) {
+  if (mode === "creator") return <ModeCreatorIcon />;
+  if (mode === "podcast") return <ModePodcastIcon />;
+  return <ModeGeneralIcon />;
+}
+
 export function EnvisionPage() {
   const { isAuthenticated, requireAuth, refreshUserProfile } = useAuth();
   const billing = useEnvisionBilling();
@@ -25,13 +43,14 @@ export function EnvisionPage() {
   const resultBodyRef = useRef<HTMLDivElement>(null);
   const questionId = useId();
   const uploadId = useId();
-  const creatorModeId = useId();
+  const modeGroupId = useId();
   const abortRef = useRef<AbortController | null>(null);
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [question, setQuestion] = useState("");
-  const [creatorMode, setCreatorMode] = useState(false);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("general");
+  const [selectedPromptId, setSelectedPromptId] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [phase, setPhase] = useState<FlowPhase>("form");
   const [loadingMessage, setLoadingMessage] = useState("Uploading your video…");
@@ -42,6 +61,7 @@ export function EnvisionPage() {
   const [errorStep, setErrorStep] = useState<string | null>(null);
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
+  const modeOption = getAnalysisModeOption(analysisMode);
   const canSubmit =
     videoFile !== null && question.trim().length > 0 && phase === "form";
 
@@ -99,6 +119,16 @@ export function EnvisionPage() {
     applyVideoFile(file);
   };
 
+  const selectAnalysisMode = (mode: AnalysisMode) => {
+    setAnalysisMode(mode);
+    setSelectedPromptId(null);
+  };
+
+  const applyPromptAction = (id: string, prompt: string) => {
+    setSelectedPromptId(id);
+    setQuestion(prompt);
+  };
+
   const runAnalysis = useCallback(async () => {
     if (!videoFile) return;
 
@@ -123,11 +153,7 @@ export function EnvisionPage() {
             const pct = Math.min(100, Math.round(ratio * 100));
             setUploadProgress(pct);
             if (pct >= 100) {
-              setLoadingMessage(
-                creatorMode
-                  ? "Reviewing your video as a creator strategist…"
-                  : "Watching your video…",
-              );
+              setLoadingMessage(getAnalysisModeOption(analysisMode).statusMessage);
             } else {
               setLoadingMessage(`Uploading your video… ${pct}%`);
             }
@@ -142,7 +168,7 @@ export function EnvisionPage() {
           },
         },
         controller.signal,
-        { creatorMode },
+        { analysisMode },
       );
 
       setResult(response.answer);
@@ -170,7 +196,7 @@ export function EnvisionPage() {
         abortRef.current = null;
       }
     }
-  }, [creatorMode, question, refreshUserProfile, videoFile]);
+  }, [analysisMode, question, refreshUserProfile, videoFile]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -242,19 +268,13 @@ export function EnvisionPage() {
         <div className="content-card content-card--result">
           <p className="result-kicker">
             {isStreaming
-              ? creatorMode
-                ? "Creator Mode"
-                : "Analyzing your video"
-              : creatorMode
-                ? "Creator Mode · complete"
-                : "Analysis complete"}
+              ? modeOption.resultKicker
+              : `${modeOption.resultKicker} · complete`}
           </p>
           <h2 className="result-title">
             {isStreaming
-              ? "Visorixs is writing…"
-              : creatorMode
-                ? "Here's how to improve this video"
-                : "Here's what Visorixs found"}
+              ? modeOption.resultTitleStreaming
+              : modeOption.resultTitleDone}
           </h2>
           {isStreaming ? (
             <p className="result-status">{loadingMessage}</p>
@@ -274,7 +294,7 @@ export function EnvisionPage() {
 
                 <div
                   className="result-message result-message--envision"
-                  aria-label={creatorMode ? "Visorixs Creator Mode answer" : "Visorixs answer"}
+                  aria-label={`${modeOption.label} mode answer`}
                 >
                   <div
                     ref={resultBodyRef}
@@ -283,7 +303,7 @@ export function EnvisionPage() {
                     {result ? (
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{result}</ReactMarkdown>
                     ) : isStreaming ? (
-                      <p className="result-body__placeholder">Writing your tips…</p>
+                      <p className="result-body__placeholder">Writing your answer…</p>
                     ) : null}
                   </div>
                 </div>
@@ -339,6 +359,37 @@ export function EnvisionPage() {
         </div>
 
         <form className="envision-form" onSubmit={handleSubmit} noValidate>
+          <div className="envision-form__field">
+            <p className="envision-form__label" id={modeGroupId}>
+              Analysis mode
+            </p>
+            <div
+              className="mode-picker"
+              role="radiogroup"
+              aria-labelledby={modeGroupId}
+            >
+              {ANALYSIS_MODES.map((mode) => {
+                const selected = analysisMode === mode.id;
+                return (
+                  <button
+                    key={mode.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    className={`mode-picker__item ${selected ? "mode-picker__item--selected" : ""}`}
+                    onClick={() => selectAnalysisMode(mode.id)}
+                  >
+                    <span className="mode-picker__circle" aria-hidden>
+                      <ModeIcon mode={mode.id} />
+                    </span>
+                    <span className="mode-picker__label">{mode.label}</span>
+                    <span className="mode-picker__hint">{mode.hint}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="envision-form__field">
             <label className="visually-hidden" htmlFor={uploadId}>
               Video file
@@ -420,6 +471,36 @@ export function EnvisionPage() {
             </p>
           </div>
 
+          {modeHasPromptActions(modeOption) ? (
+            <div className="envision-form__field">
+              <p className="envision-form__label">Workflows</p>
+              <div className="prompt-groups">
+                {modeOption.promptGroups.map((group) => (
+                  <div key={group.id} className="prompt-group">
+                    <p className="prompt-group__label">{group.label}</p>
+                    <div className="prompt-tiles" role="list">
+                      {group.actions.map((action) => {
+                        const selected = selectedPromptId === action.id;
+                        return (
+                          <button
+                            key={action.id}
+                            type="button"
+                            role="listitem"
+                            className={`prompt-tile ${selected ? "prompt-tile--selected" : ""}`}
+                            onClick={() => applyPromptAction(action.id, action.prompt)}
+                          >
+                            <span className="prompt-tile__label">{action.label}</span>
+                            <span className="prompt-tile__hint">{action.hint}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           <div className="envision-form__field">
             <label className="envision-form__label" htmlFor={questionId}>
               Your question
@@ -428,34 +509,14 @@ export function EnvisionPage() {
               id={questionId}
               className="envision-form__textarea"
               value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder={
-                creatorMode
-                  ? "What should we improve? (e.g. How can I make the hook stronger? Review pacing and the CTA…)"
-                  : "What do you want to know about this video? (e.g. Summarize the main points, identify key moments, explain what happens at 2:30…)"
-              }
+              onChange={(e) => {
+                setQuestion(e.target.value);
+                setSelectedPromptId(null);
+              }}
+              placeholder={modeOption.placeholder}
               rows={4}
               required
             />
-          </div>
-
-          <div className="envision-form__mode">
-            <label className="creator-mode-toggle" htmlFor={creatorModeId}>
-              <input
-                id={creatorModeId}
-                type="checkbox"
-                className="creator-mode-toggle__input"
-                checked={creatorMode}
-                onChange={(e) => setCreatorMode(e.target.checked)}
-              />
-              <span className="creator-mode-toggle__switch" aria-hidden />
-              <span className="creator-mode-toggle__copy">
-                <span className="creator-mode-toggle__title">Creator Mode</span>
-                <span className="creator-mode-toggle__hint">
-                  Get high-impact Instagram &amp; TikTok edit suggestions for this video
-                </span>
-              </span>
-            </label>
           </div>
 
           {phase === "error" && errorMessage ? (
@@ -471,7 +532,7 @@ export function EnvisionPage() {
           ) : null}
 
           <button type="submit" className="btn btn--primary" disabled={!canSubmit}>
-            {creatorMode ? "Ask Visorixs · Creator Mode" : "Ask Visorixs"}
+            {modeOption.submitLabel}
           </button>
 
           <p className="envision-form__footer-hint">
