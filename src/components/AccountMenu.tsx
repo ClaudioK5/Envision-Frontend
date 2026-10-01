@@ -1,20 +1,18 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
+import { useEnvisionBilling } from "../subscription/useEnvisionBilling";
 
 type AccountMenuProps = {
   open: boolean;
   onClose: () => void;
   anchorRef: React.RefObject<HTMLElement | null>;
-  onOpenAccount: () => void;
 };
 
-export function AccountMenu({
-  open,
-  onClose,
-  anchorRef,
-  onOpenAccount,
-}: AccountMenuProps) {
+export function AccountMenu({ open, onClose, anchorRef }: AccountMenuProps) {
   const { signOut, requireAuth, isAuthenticated } = useAuth();
+  const billing = useEnvisionBilling();
+  const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,16 +39,16 @@ export function AccountMenu({
   const goAccount = () => {
     onClose();
     if (isAuthenticated) {
-      onOpenAccount();
+      navigate("/account");
       return;
     }
     void requireAuth(
       () => {
-        onOpenAccount();
+        navigate("/account");
       },
       {
         modalTitle: "Sign in to view your account",
-        modalSubtitle: "Connect with Google to see your profile details.",
+        modalSubtitle: "Connect with Google to see your profile and plan.",
       },
     );
   };
@@ -58,7 +56,16 @@ export function AccountMenu({
   const handleSignOut = async () => {
     onClose();
     await signOut();
+    navigate("/");
   };
+
+  const planHint = !isAuthenticated
+    ? null
+    : billing.isPro
+      ? "Pro"
+      : billing.remainingFree === 1
+        ? "Free · 1 left"
+        : `Free · ${billing.remainingFree} left`;
 
   return (
     <div ref={menuRef} className="account-menu" role="menu">
@@ -68,7 +75,8 @@ export function AccountMenu({
         role="menuitem"
         onClick={goAccount}
       >
-        Account
+        <span className="account-menu__item-main">Account</span>
+        {planHint ? <span className="account-menu__item-meta">{planHint}</span> : null}
       </button>
       <div className="account-menu__divider" role="separator" />
       <button

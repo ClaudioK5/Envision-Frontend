@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { AccountMenu } from "./AccountMenu";
-import { AccountModal } from "./AccountModal";
 import { EnvisionLogo } from "./EnvisionLogo";
 import { ThemeToggle } from "./ThemeToggle";
 import { UserIcon } from "./Icons";
@@ -10,7 +9,6 @@ import { UserIcon } from "./Icons";
 export function Layout() {
   const { requireAuth, refreshSession, session, isAuthenticated } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const profileRef = useRef<HTMLButtonElement>(null);
 
   const openAccountMenu = () => {
@@ -50,10 +48,10 @@ export function Layout() {
       </div>
 
       <header className="header">
-        <div className="logo" aria-label="Visorixs home">
+        <Link to="/" className="logo" aria-label="Visorixs home">
           <EnvisionLogo className="logo__icon" size={36} />
           <span className="logo__mark">Visorixs</span>
-        </div>
+        </Link>
 
         <div className="header__actions">
           <ThemeToggle />
@@ -87,7 +85,6 @@ export function Layout() {
               open={menuOpen}
               onClose={() => setMenuOpen(false)}
               anchorRef={profileRef}
-              onOpenAccount={() => setAccountOpen(true)}
             />
           </div>
         </div>
@@ -96,8 +93,6 @@ export function Layout() {
       <main className="main">
         <Outlet />
       </main>
-
-      <AccountModal visible={accountOpen} onClose={() => setAccountOpen(false)} />
     </div>
   );
 }
