@@ -8,7 +8,6 @@ import {
   type AnalysisMode,
 } from "../analysis/analysisModes";
 import { useAuth } from "../auth/AuthProvider";
-import { FreeAnalysesBanner } from "../components/subscription/FreeAnalysesBanner";
 import { UpgradeEnvisionModal } from "../components/subscription/UpgradeEnvisionModal";
 import {
   ModeCreatorIcon,
@@ -348,7 +347,6 @@ export function EnvisionPage() {
     <section className="envision-page">
       <UpgradeEnvisionModal open={upgradeModalOpen} onClose={() => setUpgradeModalOpen(false)} />
       <div className="content-card">
-        <FreeAnalysesBanner />
         <div className="envision-page__hero">
           <h1 className="envision-page__title">
             AI that watches your videos and answers your questions.
