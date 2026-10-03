@@ -347,14 +347,7 @@ export function EnvisionPage() {
     <section className="envision-page">
       <UpgradeEnvisionModal open={upgradeModalOpen} onClose={() => setUpgradeModalOpen(false)} />
       <div className="content-card">
-        <div className="envision-page__hero">
-          <h1 className="envision-page__title">
-            AI that watches your videos and answers your questions.
-          </h1>
-          <p className="envision-page__subtitle">
-            Upload a video and ask what you want to know about it
-          </p>
-        </div>
+        <h1 className="visually-hidden">Analyze a video with Visorixs</h1>
 
         <form className="envision-form" onSubmit={handleSubmit} noValidate>
           <div className="envision-form__field">
